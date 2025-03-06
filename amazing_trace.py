@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib.ticker import MaxNLocator
 import time
 import os
+import subprocess
 
 def execute_traceroute(destination):
     """
@@ -15,6 +16,14 @@ def execute_traceroute(destination):
     Returns:
         str: The raw output from the traceroute command
     """
+    try:
+        traceroute1 = subprocess.run(["traceroute -I {destination}"])
+        print(traceroute1.stdout)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+
+
+
     # Your code here
     # Hint: Use the subprocess module to run the traceroute command
     # Make sure to handle potential errors
