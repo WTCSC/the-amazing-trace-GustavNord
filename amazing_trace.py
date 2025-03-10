@@ -19,7 +19,7 @@ def execute_traceroute(destination):
     """
 
     try:
-        results = subprocess.run(["traceroute", "-i", destination], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        results = subprocess.run(["traceroute", "-I", destination], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         return results.stdout
     except subprocess.CalledProcessError as e:
         print(f"Error: {e}")
