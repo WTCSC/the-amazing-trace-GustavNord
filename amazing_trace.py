@@ -17,6 +17,7 @@ def execute_traceroute(destination):
     Returns:
         str: The raw output from the traceroute command
     """
+
     try:
         results = subprocess.run(["traceroute", "-I", destination], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         return results.stdout
@@ -24,13 +25,6 @@ def execute_traceroute(destination):
         print(f"Error: {e}")
         return None
 
-
-    # Your code here
-    # Hint: Use the subprocess module to run the traceroute command
-    # Make sure to handle potential errors
-
-    # Remove this line once you implement the function,
-    # and don't forget to *return* the output
     pass
 
 def parse_traceroute(traceroute_output):
@@ -73,6 +67,32 @@ def parse_traceroute(traceroute_output):
     """
 
     hops = []
+    lines = traceroute_output.splitlines()
+
+    for line in lines[1:]:
+        parts = line.split()
+        if len(parts) < 5:
+            continue
+
+        hop = int(parts[0])
+
+        ip = None if '*' in parts[1] else parts[1]
+
+        hostname = parts[2] 
+
+        rtt = []
+
+        for part in parts[3:]:
+            if part == '*':
+                rtt.append(None)
+            else:
+                try:
+                    rtt.append(float(part.split('ms', '')))
+                except ValueError:
+                    rtt.append(None)
+
+
+        hops.append("\n'hop': hop, \n'ip': ip, \n'hostname': hostname, \n'rtt': rtt,")
 
 
     # Hint: Use regular expressions to extract the relevant information
