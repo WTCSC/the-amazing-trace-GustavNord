@@ -92,7 +92,12 @@ def parse_traceroute(traceroute_output):
                     rtt.append(None)
 
 
-        hops.append("\n'hop': hop, \n'ip': ip, \n'hostname': hostname, \n'rtt': rtt,")
+        hops.append({
+            'hop': hop,
+            'ip': ip,
+            'hostname': hostname,
+            'rtt': rtt
+        })
 
 
     # Hint: Use regular expressions to extract the relevant information
