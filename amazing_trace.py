@@ -100,12 +100,6 @@ def parse_traceroute(traceroute_output):
 
     return hops
 
-    # Hint: Use regular expressions to extract the relevant information
-    # Handle timeouts (asterisks) appropriately
-
-    # Remove this line once you implement the function,
-    # and don't forget to *return* the output
-#    pass
 
 # ============================================================================ #
 #                    DO NOT MODIFY THE CODE BELOW THIS LINE                    #
