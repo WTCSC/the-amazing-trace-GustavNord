@@ -20,8 +20,9 @@ def execute_traceroute(destination):
     """
 
     try:
+        command = ["traceroute", "-I", destination]
         # Run the traceroute command with -I
-        results = subprocess.run(["traceroute", "-I", destination], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        results = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         return results.stdout # Return the raw output of the traceroute command
     except subprocess.CalledProcessError as e:
         # Prints an error if traceroute fails and return None
