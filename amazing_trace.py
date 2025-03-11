@@ -25,7 +25,6 @@ def execute_traceroute(destination):
         print(f"Error: {e}")
         return None
 
-    pass
 
 def parse_traceroute(traceroute_output):
     """
@@ -66,6 +65,9 @@ def parse_traceroute(traceroute_output):
     ```
     """
 
+    if not traceroute_output:
+        return []
+
     hops = []
     lines = traceroute_output.splitlines()
 
@@ -91,6 +93,12 @@ def parse_traceroute(traceroute_output):
                 except ValueError:
                     rtt.append(None)
 
+    
+
+
+
+
+
 
         hops.append({
             'hop': hop,
@@ -99,13 +107,14 @@ def parse_traceroute(traceroute_output):
             'rtt': rtt
         })
 
+    return hops
 
     # Hint: Use regular expressions to extract the relevant information
     # Handle timeouts (asterisks) appropriately
 
     # Remove this line once you implement the function,
     # and don't forget to *return* the output
-    pass
+#    pass
 
 # ============================================================================ #
 #                    DO NOT MODIFY THE CODE BELOW THIS LINE                    #
