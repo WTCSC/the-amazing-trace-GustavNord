@@ -78,26 +78,17 @@ def parse_traceroute(traceroute_output):
 
         hop = int(parts[0])
 
-        ip = None if '*' in parts[1] else parts[1]
-
-        hostname = parts[2] 
-
-        rtt = []
-
-        for part in parts[3:]:
-            if part == '*':
-                rtt.append(None)
-            else:
-                try:
-                    rtt.append(float(part.split('ms', '')))
-                except ValueError:
-                    rtt.append(None)
+        if "*" in parts:
+            hops.append({'hop': hop, 'ip': None, 'hostname': None, 'rtt': [None, None, None]})
+            continue
 
     
+        ip_match = re.search(r"\(([\d\.]+)\)", line)
+        ip = ip_match.group(1) if ip_match else None
+        hostname = parts[1] if ip_match and parts[1] != f"({ip})" else None
 
-
-
-
+        rtt_values = re.findall(r"(\d+\.\d+)\s+ms", line)
+        rtt = [float(r) for r in rtt_values] if rtt_values else [None, None, None]
 
 
         hops.append({
