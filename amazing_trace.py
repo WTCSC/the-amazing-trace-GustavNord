@@ -7,6 +7,7 @@ import os
 import subprocess
 import re
 
+# Function to execute the traceroute command and record the output
 def execute_traceroute(destination):
     """
     Executes a traceroute to the specified destination and returns the output.
@@ -19,13 +20,15 @@ def execute_traceroute(destination):
     """
 
     try:
+        # Run the traceroute command with -I
         results = subprocess.run(["traceroute", "-I", destination], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        return results.stdout
+        return results.stdout # Return the raw output of the traceroute command
     except subprocess.CalledProcessError as e:
+        # Prints an error if traceroute fails and return None
         print(f"Error: {e}")
         return None
 
-
+# Function to parse the traceroute output into data
 def parse_traceroute(traceroute_output):
     """
     Parses the raw traceroute output into a structured format.
@@ -65,32 +68,34 @@ def parse_traceroute(traceroute_output):
     ```
     """
 
-    if not traceroute_output:
-        return []
+    if not traceroute_output: # Check if traceroute output is empty or None
+        return [] # If no output, return empty list
 
-    hops = []
-    lines = traceroute_output.splitlines()
+    hops = [] # A list to store the hops information
+    lines = traceroute_output.splitlines() # Split the output into lines
 
-    for line in lines[1:]:
-        parts = line.split()
-        if len(parts) < 5:
+    for line in lines[1:]: # Skips the first line
+        parts = line.split() # Split each line into parts
+        if len(parts) < 5: # Skips lines that don't have enough parts to represent a valid hop
             continue
 
-        hop = int(parts[0])
-
+        hop = int(parts[0]) # The hop number that is the first number of the line
+        
+        # Check for timeouts
         if "*" in parts:
             hops.append({'hop': hop, 'ip': None, 'hostname': None, 'rtt': [None, None, None]})
-            continue
+            continue # Skips to the next hop if timeout
 
-    
-        ip_match = re.search(r"\(([\d\.]+)\)", line)
-        ip = ip_match.group(1) if ip_match else None
-        hostname = parts[1] if ip_match and parts[1] != f"({ip})" else None
+        # Extract IP address and hostname
+        ip_match = re.search(r"\(([\d\.]+)\)", line) # Look for the IP address in parentheses
+        ip = ip_match.group(1) if ip_match else None # Get IP if match is found, otherwise None
+        hostname = parts[1] if ip_match and parts[1] != f"({ip})" else None # Get hostname if it isn't the same as the IP address
 
+        # Get RTT values
         rtt_values = re.findall(r"(\d+\.\d+)\s+ms", line)
         rtt = [float(r) for r in rtt_values] if rtt_values else [None, None, None]
 
-
+        # Append the hop information to the hops list
         hops.append({
             'hop': hop,
             'ip': ip,
@@ -98,7 +103,7 @@ def parse_traceroute(traceroute_output):
             'rtt': rtt
         })
 
-    return hops
+    return hops # Return list of hops with data
 
 
 # ============================================================================ #
